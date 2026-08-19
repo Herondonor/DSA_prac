@@ -1,21 +1,40 @@
 #include<stdio.h>
-#include<stdbool.h>
 #include<stdlib.h>
-#include"mylist.h"
+#include<stdbool.h>
+#include"myList.h"
 
 int main(){
-    List myList = newList(5);
-
-    printf("\033[H\033[J");
-
-    display(myList);
-
-    insertRear(&myList, 10);
-    display(myList);
-
-    insertRear(&myList, 5);
-    display(myList);
-
-    insertRear(&myList, 1);
-    display(myList);
+    List list;
+    
+    init(&list, 10);
+    insertFront(&list, 5);
+    insertFront(&list, 7);
+    insertFront(&list, 3);
+    insertFront(&list, 5);
+    insertFront(&list, 7);
+    display(list);
+    insertRear(&list, 6);
+    display(list);
+    insertSorted(&list, 2);
+    display(list);
+    insertIndex(&list, 4, 2);
+    display(list);
+    
+    
+    deleteFront(&list);
+    display(list);
+    deleteRear(&list);
+    display(list);
+    deleteIndex(&list, 3);
+    display(list);
+    deleteOccurence(&list, 7);
+    display(list);
+    deleteAllOccurences(&list, 5);
+    display(list);
+    /*
+    search(list);
+    searchIndex(list);
+    
+    count(list)
+    */
 }
