@@ -22,10 +22,11 @@ bool deleteIndex(List *list, int index);
 bool deleteOccurence(List *list, int item);
 bool deleteAllOccurences(List *list, int item);
 
-void search(List list);
-void searchIndex(List list, int index);
+bool search(List list, int item);
+bool searchIndex(List list, int index);
 
-void count(List list, int item);
+void countAll(List list);
+void countNumber(List list, int item);
 
 
 //all insert(front, rear), delete(front, rear, all occurences of item), search -> true/false and index, count no of occurences,  

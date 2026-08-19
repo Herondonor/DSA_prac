@@ -118,8 +118,8 @@ bool deleteOccurence(List *list, int item){
 bool deleteAllOccurences(List *list, int item){
     if(list->count > 0){
         for(int i = 0; i < list->count; ++i){
-            if(list->elems[i] == item){
-                return deleteOccurence(list, item);
+            if(list->elems[i] != item){
+                deleteOccurence(list, item);
             }
         }
         return true;
@@ -128,11 +128,39 @@ bool deleteAllOccurences(List *list, int item){
 }
 
 
-void search(List list);
-void searchIndex(List list, int index);
+bool search(List list, int item){
+    for(int i = 0; i < list.count; ++i){
+        if(list.elems[i] == item){
+            printf("True\n");
+            return true;
+        }
+    }
+    printf("False\n");
+    return false;
+    
+}
+bool searchIndex(List list, int index){
+    if(index < list.count){
+        printf("Num at index %d: %d\n", index, list.elems[index]);
+        return true;
+    }
+    return false;
+    
+}
 
-void count(List list, int item);
+void countAll(List list){
+    printf("Numbers counted: %d\n", list.count);
+}
 
+void countNumber(List list, int item){
+    int num = 0;
+    for(int i = 0; i <= list.count; ++i){
+        if(list.elems[i] == item){
+            num++;
+        }
+    }
+    printf("Number of Occurences: %d\n", num);
+}
 
 
 void display(List list){
