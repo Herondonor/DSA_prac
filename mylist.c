@@ -2,135 +2,130 @@
 #include<stdlib.h>
 #include<stdbool.h>
 #include"myList.h"
+#include"statistics.h"
 
-void init(List *list, int size){
-    list->size = size;
-    list->elems = malloc(sizeof(list) * size);    
-    list->count = 0;
-}
-
-bool insertFront(List *list, int item){
-    if(list->count < list->size){
-        for(int i = list->count; i > 0; --i){
-            list->elems[i] = list->elems[i - 1];
-        }
-        list->elems[0] = item;
-        list->count++;
-        return true;
-    }
-    return false;
-}
-bool insertRear(List *list, int item){
-    if(list->count < list->size){
-        list->elems[list->count] = item;
-        list->count++;
-        return true;
-    }
-    return false;
-}
-bool insertIndex(List *list, int item, int index){
-    int n = 0;
-    if(index < list->size){
-        for(int i = list->count; i > index - 1; --i){
-            list->elems[i] = list->elems[i - 1];
-            n = i;
-        }
-        list->elems[n] = item;
-        list->count++;
-        return true;
-    }
-    return false;
-
-}
-bool insertSorted(List *list, int item){
-    int n = 0;
-    if(list->count < list->size){
-        /*
-        list->size *= 2;
-        list->elems = realloc(list->elems, sizeof(list) * list->size);
-        */
-        for(int i = list->count; i > 0; --i){
-            if(list->elems[i - 1] > item){
-                list->elems[i] = list->elems[i - 1];
-            } else{
-                n = i;
-                break;
-            }
-        }
-        list->elems[n] = item;
-        list->count++;
-        return true;
-    }
-
+void init(List *list){
+    *list = NULL;
 }
 
-bool deleteFront(List *list){
-    if(list->count > 0){
-        for(int i = 0; i < list->count; ++i){
-            list->elems[i] = list->elems[i + 1];
+void display(List list){
+    List trav;
+    for(trav = list; trav != NULL; trav = trav->link){
+        printf("[%d]", trav->data);
+        if(trav->link != NULL){
+            printf(" -> ");
         }
-        list->count--;
-        return true;
     }
-    return false;
 }
-bool deleteRear(List *list){
-    if(list->count > 0){
-        list->elems[list->count] = 0;
-        list->count--;
-        return true;
-    }
-    return false;
 
-}
-bool deleteIndex(List *list, int index){
-    int n = 0;
-    if(index < list->size){
-        for(int i = index; i < list->count; ++i){
-            list->elems[i] = list->elems[i + 1];
-        }
-        list->count--;
-        return true;
+void insertFront(List *list, int item){
+    List temp;
+    temp = malloc(sizeof(struct node));
+    if(temp){
+        temp->data = item;
+        temp->link = *list;
+        *list = temp;
     }
-    return false;
-}
-bool deleteOccurence(List *list, int item){
-    int n = 0;
-    if(list->count > 0){
-        for(int i = 0; i < list->count; ++i){
-            if(list->elems[i] != item){
-                continue;
-            } else{
-                n = i;
-                break;
-            }
-            
-        }
-        for(int i = n; i < list->count; ++i){
-            list->elems[i] = list->elems[i + 1];
-        }
-        list->count--;
-        return true;
-    }
-    return false;
+    
     
 }
-bool deleteAllOccurences(List *list, int item){
-    if(list->count > 0){
-        for(int i = 0; i < list->count; ++i){
-            if(list->elems[i] != item){
-                deleteOccurence(list, item);
-            }
-        }
-        return true;
+void insertRear(List *list, int item){
+    List *trav, temp;
+    for(trav = list; *trav != NULL; trav = &(*trav)->link);
+    temp = malloc(sizeof(struct node));
+    if(temp){
+        temp->data = item;
+        temp->link = *trav;
+        *trav = temp;
     }
-    return false;
+    
+}
+
+void insertIndex(List *list, int item, int index){
+    List *trav, temp;
+    for(trav = list; *trav != NULL && index > 1; --index, trav = &(*trav)->link);
+    temp = malloc(sizeof(struct node));
+    if(temp){
+        temp->data = item;
+        temp->link = *trav;
+        *trav = temp;
+    }
+
+}
+void insertSorted(List *list, int item){
+    List *trav, temp;
+    for(trav = list; *trav != NULL && (*trav)->data < item; trav = &(*trav)->link);
+    temp = malloc(sizeof(struct node));
+    if(temp){
+        temp->data = item;
+        temp->link = *trav;
+        *trav = temp;
+    }
+
+
+}
+
+void deleteFront(List *list){
+    List temp;
+    if (*list != NULL) {
+        temp = *list;
+        *list = temp->link;
+        free(temp);
+    }
+}
+void deleteRear(List *list){
+    List *trav, temp;
+    for(trav = list; (*trav)->link->link != NULL; trav = &(*trav)->link);
+    temp = *trav;
+    if(temp->link != NULL){
+        free(temp->link);
+        temp->link = NULL;
+    }
+
+}
+
+void deleteIndex(List *list, int index){
+    List *trav, temp;
+    for(trav = list; (*trav)->link->link != NULL && index > 1; --index, trav = &(*trav)->link);
+    
+    if(*trav != NULL){
+        temp = *trav;
+        *trav = temp->link;
+        free(temp);
+        
+    }
+}
+
+void deleteOccurence(List *list, int item){
+    List *trav, temp;
+    for(trav = list; (*trav)->link != NULL && (*trav)->data != item; trav = &(*trav)->link);
+    
+    if(*trav != NULL){
+        temp = *trav;
+        *trav = temp->link;
+        free(temp);
+        
+    }
+    
+}
+void deleteAllOccurences(List *list, int item){
+    List *trav, temp;
+    for(trav = list; *trav != NULL; ){
+        if((*trav)->data == item){
+            temp = *trav;
+            *trav = temp->link;
+            free(temp);
+        } else{
+            trav = &(*trav)->link;
+        }
+    }
 }
 
 
 bool search(List list, int item){
-    for(int i = 0; i < list.count; ++i){
-        if(list.elems[i] == item){
+    List trav;
+    for(trav = list; trav != NULL; trav = trav->link){
+        if(trav->data == item){
             printf("True\n");
             return true;
         }
@@ -139,37 +134,119 @@ bool search(List list, int item){
     return false;
     
 }
-bool searchIndex(List list, int index){
-    if(index < list.count){
-        printf("Num at index %d: %d\n", index, list.elems[index]);
-        return true;
+void searchIndex(List list, int index){
+    List trav;
+    int count = 0;
+    for(trav = list; trav != NULL && index > 1; --index, trav = trav->link);
+    
+    
+    if(trav != NULL){
+        printf("Number at Index %d: %d\n", index, trav->data);
+    } else{
+        printf("None\n");
     }
-    return false;
+    
+    
     
 }
 
 void countAll(List list){
-    printf("Numbers counted: %d\n", list.count);
+    List trav;
+    int count = 0; 
+    for(trav = list; trav != NULL; trav = trav->link){
+        count++;
+    }
+    if(count != 0){
+        printf("Number of nodes: %d\n", count);
+    } else{
+        printf("Empty!\n");
+    }
 }
 
 void countNumber(List list, int item){
-    int num = 0;
-    for(int i = 0; i <= list.count; ++i){
-        if(list.elems[i] == item){
-            num++;
+    List trav;
+    int count = 0; 
+    for(trav = list; trav != NULL; trav = trav->link){
+        if(trav->data == item){
+            count++;
         }
     }
-    printf("Number of Occurences: %d\n", num);
+    if(count != 0){
+        printf("Number of nodes with value %d: %d\n", item, count);
+    } else{
+        printf("Empty!\n");
+    }
+}
+
+void mean(List *list){
+    List *trav;
+    double count = 0; 
+    double sum = 0;
+    for(trav = list; *trav != NULL; trav = &(*trav)->link){
+        count++;
+        sum += (*trav)->data;
+    }
+    double final = sum / count;
+    if(count != 0){
+        printf("Mean of list: %.2lf\n", final);
+    } else{
+        printf("Empty!\n");
+    }
+    
+}
+
+void median(List *list){
+    List slow, fast, prev;
+    slow = *list;
+    fast = *list;
+    prev = NULL;
+    while(fast != NULL && fast->link != NULL){
+        prev = slow;
+        slow = slow->link;
+        fast = fast->link->link;
+    }
+    
+    if(fast != NULL){
+        printf("Median of list: %d\n", slow->data);
+    } else{
+        double final = (prev->data + slow->data)/ 2.0;
+        printf("Median of list: %.2lf\n", final);
+    }
+    
+}
+
+void mode(List *list){
+    List inner, outer;
+    
+    int mode = (*list)->data;
+    int max = 0;
+    int none = 0;
+    for(inner = *list; inner != NULL; inner = inner->link){
+        int count = 0;
+        for(outer = *list; outer != NULL; outer = outer->link){
+            if(inner->data == outer->data){
+                count++;
+            }
+        }
+        if(count > max){
+            max = count;
+            mode = inner->data;
+            none = 0;
+        }
+        if(count == max && inner->data != mode){
+            none = 1;
+        }
+        
+    }
+    
+    if(max > 1 && !none){
+        printf("Mode of list: %d\n", mode);
+    } else{
+        printf("Mode of list: None");
+    }
+    
 }
 
 
-void display(List list){
-    printf("{");
-    for(int i = 0; i < list.count; ++i){
-        printf("%d", list.elems[i]);
-        if(i < list.count - 1){
-            printf(", ");
-        }
-    }
-    printf("}\n");
-}
+
+
