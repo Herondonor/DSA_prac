@@ -1,4 +1,5 @@
 #include<stdio.h>
+#include<stdbool.h>
 #define MAX 10
 #define TOP 100000
 
@@ -13,11 +14,13 @@ typedef struct{
     int avail;
 }VHeap;
 
+typedef int List;
+
 void initVSpace(VHeap *vh){
     
     for(int i = MAX - 1; i >= 0; --i){
         vh->elems[i].next = i - 1;
-        vh->elems[i].data = 0;
+        
     }
     vh->avail = MAX - 1;
 
@@ -28,7 +31,7 @@ int allocSpace(VHeap *vh){
     int retVal = vh->avail;
     
     if(retVal != -1){
-        retVal = vh->elems[retVal].next;
+        vh->avail = vh->elems[vh->avail].next;
     } 
     return retVal;
 }
@@ -42,18 +45,54 @@ void freeSpace(VHeap *vh, int index){
 
 }
 
+void insertFront(VHeap *vh, List *list, int item){
+    List temp = allocSpace(vh);
+    
+    vh->elems[temp].data = item;
+    vh->elems[temp].next = *list;
+    *list = temp;
+}
+
+void insertSorted(VHeap *vh, List *list, int item){
+    List temp = allocSpace(vh);
+    
+    vh->elems[temp].data = item;
+    vh->elems[temp].next = *list;
+    *list = temp;
+}
+
+void display(VHeap vh, List list){
+    printf("{");
+    while(list != -1){
+        printf("%5d", vh.elems[list].data);
+        list = vh.elems[list].next;
+    } printf("}\n");
+}
+
 void visualize(VHeap vh){
     printf("%10s | %10s | %10s\n", "index", "data", "next");
     for(int i = 0; i < MAX; ++i){
         printf("%10d | %10d | %10d\n", i ,vh.elems[i].data, vh.elems[i].next);
     }
-    printf("\nAvail: %d", vh.avail);
+    printf("\nAvail: %d\n", vh.avail);
 }
 
 int main(){
     VHeap VH;
+    List list = -1;
     initVSpace(&VH);
+    
+    insertSorted(&VH, &list, 20);
     visualize(VH);
+    display(VH, list);
+    
+    insertSorted(&VH, &list, 10);
+    visualize(VH);
+    display(VH, list);
+    
+    insertSorted(&VH, &list, 30);
+    visualize(VH);
+    display(VH, list);
     
 }
 
