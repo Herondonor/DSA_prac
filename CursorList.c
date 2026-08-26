@@ -57,8 +57,11 @@ void insertSorted(VHeap *vh, List *list, int item){
     List temp = allocSpace(vh);
     
     vh->elems[temp].data = item;
-    vh->elems[temp].next = *list;
-    *list = temp;
+    int *trav;
+    for(trav = list; *trav != -1 && vh->elems[*trav].data < item; trav = &(vh->elems[*trav].next));
+    
+    vh->elems[temp].next = *trav;
+    *trav = temp;
 }
 
 void display(VHeap vh, List list){
@@ -66,7 +69,7 @@ void display(VHeap vh, List list){
     while(list != -1){
         printf("%5d", vh.elems[list].data);
         list = vh.elems[list].next;
-    } printf("}\n");
+    } printf("}\n\n");
 }
 
 void visualize(VHeap vh){
