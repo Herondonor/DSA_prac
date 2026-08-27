@@ -18,6 +18,10 @@ int main(){
     insertRear(&VH, &list, 20);
     visualize(VH);
     display(VH, list);
+
+    insertIndex(&VH, &list, 40, 1);
+    visualize(VH);
+    display(VH, list);
  
 }
 

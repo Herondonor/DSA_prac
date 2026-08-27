@@ -41,9 +41,8 @@ void insertFront(VHeap *vh, List *list, int item){
 void insertSorted(VHeap *vh, List *list, int item){
     List *trav, temp = allocSpace(vh);
     
-    vh->elems[temp].data = item;
     for(trav = list; *trav != -1 && vh->elems[*trav].data < item; trav = &vh->elems[*trav].next);
-    
+    vh->elems[temp].data = item;
     vh->elems[temp].next = *trav;
     *trav = temp;
 }
@@ -51,9 +50,18 @@ void insertSorted(VHeap *vh, List *list, int item){
 void insertRear(VHeap *vh, List *list, int item){
     List *trav, temp = allocSpace(vh);
     
-    vh->elems[temp].data = item;
     for(trav = list; *trav != -1; trav = &vh->elems[*trav].next);
+    vh->elems[temp].data = item;
+    vh->elems[temp].next = *trav;
+    *trav = temp;
+}
+
+void insertIndex(VHeap *vh, List *list, int item, int index){
+    List *trav, temp = allocSpace(vh);
+    int i = 0;
+    for(trav = list; *trav != -1 && i < index; trav = &vh->elems[*trav].next, ++i);
     
+    vh->elems[temp].data = item;
     vh->elems[temp].next = *trav;
     *trav = temp;
 }
