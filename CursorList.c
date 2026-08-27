@@ -58,7 +58,7 @@ void insertSorted(VHeap *vh, List *list, int item){
     
     vh->elems[temp].data = item;
     int *trav;
-    for(trav = list; *trav != -1 && vh->elems[*trav].data < item; trav = &(vh->elems[*trav].next));
+    for(trav = list; *trav != -1 && vh->elems[*trav].data < item; trav = &vh->elems[*trav].next);
     
     vh->elems[temp].next = *trav;
     *trav = temp;
@@ -96,7 +96,7 @@ int main(){
     insertSorted(&VH, &list, 30);
     visualize(VH);
     display(VH, list);
-    
+ 
 }
 
 
