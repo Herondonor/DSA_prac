@@ -1,7 +1,7 @@
 #ifndef VHEAP_H
 #define VHEAP_H
 #define MAX 10
-#define TOP 100000
+#define BLANK 10000
 
 typedef struct{
     int data;

@@ -1,10 +1,12 @@
 #include<stdio.h>
 #include"VHeap.h"
 
+
 void initVSpace(VHeap *vh){
     
     for(int i = MAX - 1; i >= 0; --i){
         vh->elems[i].next = i - 1;
+        vh->elems[i].data = BLANK;
         
     }
     vh->avail = MAX - 1;
@@ -77,7 +79,15 @@ void display(VHeap vh, List list){
 void visualize(VHeap vh){
     printf("%10s | %10s | %10s\n", "index", "data", "next");
     for(int i = 0; i < MAX; ++i){
-        printf("%10d | %10d | %10d\n", i ,vh.elems[i].data, vh.elems[i].next);
+        printf("%10d | ", i);
+
+        if(vh.elems[i].data == BLANK){
+            printf("%10s | ", "");
+        } else{
+            printf("%10d | ", vh.elems[i].data);
+        }
+
+        printf("%10d\n", vh.elems[i].next);
     }
     printf("\nAvail: %d\n", vh.avail);
 }
