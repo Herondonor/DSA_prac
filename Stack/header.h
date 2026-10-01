@@ -14,13 +14,13 @@ typedef struct{
 typedef struct{
     Student Stud[MAX_SIZE];
     int top;
-}StackArray;
+} StackArray;
 
 void initStack(StackArray *Arr);
 bool push(StackArray *Arr);
 bool pop(StackArray *Arr);
 void display(StackArray Arr, Student Stud);
-StackArray struct peek(StackArray Arr);
+StackArray peek(StackArray Arr);
 void visualize(StackArray Arr, Student Stud);
 
 #endif
